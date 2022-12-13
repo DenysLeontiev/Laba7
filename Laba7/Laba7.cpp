@@ -11,38 +11,84 @@ struct Product
     double Price;
 };
 
-const int shopSize = 2;
-
-void EnterProducts(Product  products[shopSize]);
-void FindProduct(string productName, Product  products[shopSize]);
-void OutputProduct(Product product);
-void OutputAllProducts(Product product[shopSize]);
+int setValue(const char v[]);
+void EnterProducts(Product *products, int &arrSize);
+void FindProduct(string productName, Product *products, int &arrSize);
+void OutputProduct(Product products);
+void OutputAllProducts(Product *product, int &arrSize);
 bool compare(Product a, Product b);
 void drawLine(int = 40, char = '=');
+Product* AddProd(Product* products, int& size);
 
 int main()
 {
-    Product products[shopSize];
-    EnterProducts(products);
-    drawLine();
-    cout << "Before sorting: " << endl;
-    OutputAllProducts(products);
-    drawLine();
-    cout << "After sorting: " << endl;
-    sort(products, products + shopSize, compare);
-    OutputAllProducts(products);
-    drawLine();
-    cout << "Find a product: " << endl;
-    string prodName;
-    cin >> prodName;
-    FindProduct(prodName, products);
+    cout << "Hello,Welcome to the shop!" << endl;
+    char action;
+    string productName;
+    cout << "Add initial values to the shop:" << endl;
+    int arraySize = setValue("size");
+    Product* products = new Product[arraySize];
+    EnterProducts(products, arraySize);
+    
+    cout << "a - to add product" << endl << "f - to find product" << endl << "o - to output the list of products" << endl << "q - to quit the programm" << endl <<"s - to sort the list" <<  endl;
+    cout << "Enter action:";cin >> action;
 
-    return 0;
+    while (action != 'q')
+    {
+        switch (action)
+        {
+        case 'o':
+            OutputAllProducts(products, arraySize);
+            cout << "Enter action: "; cin >> action;
+            break;
+        case 'f':
+            cout << "Enter productName:";cin >> productName;
+            FindProduct(productName, products, arraySize);
+            cout << "Enter action: "; cin >> action;
+            break;
+        case 'a':
+            products = AddProd(products, arraySize);
+            cout << "Enter action: "; cin >> action;
+            break;
+        case 's':
+            sort(products, products + arraySize, compare);
+            cout << "List of products is sorted" << endl;
+            cout << "Enter action: "; cin >> action;
+            break;
+        default:
+            return 0;
+            break;
+        }
+    }
+
 }
 
-void EnterProducts(Product  products[shopSize])
+
+Product* AddProd(Product* products, int& size) {
+    size++;
+    Product* newProducts = new Product[size];
+    for (int i = 0; i < size - 1; i++)
+    {
+        newProducts[i].ProductName = products[i].ProductName;
+        newProducts[i].ShopName = products[i].ShopName;
+        newProducts[i].Price = products[i].Price;
+    }
+
+    Product newProduct;
+
+    cout << "Adding new product: " << endl;
+    cout << "ProductName: "; cin >> newProduct.ProductName;
+    cout << "ShopName: "; cin >> newProduct.ShopName;
+    cout << "Price: "; cin >> newProduct.Price;
+
+    newProducts[size - 1] = newProduct;
+
+    return newProducts;
+}
+
+void EnterProducts(Product *products, int &arrSize)
 {
-    for (int i = 0; i < shopSize; i++)
+    for (int i = 0; i < arrSize; i++)
     {
         cout << "Enter #" << (i + 1) << " product:" << endl;
         cout << "ProductName: "; cin >> products[i].ProductName;
@@ -52,10 +98,10 @@ void EnterProducts(Product  products[shopSize])
     }
 }
 
-void OutputAllProducts(Product products[shopSize])
+void OutputAllProducts(Product *products, int &arrSize)
 {
     cout << "Here is a list of all products" << endl;
-    for (int i = 0; i < shopSize; i++)
+    for (int i = 0; i < arrSize; i++)
     {
         cout << "Product # " << (i + 1) << endl;
         cout << " ProductName: "; cout << products[i].ProductName;
@@ -63,11 +109,12 @@ void OutputAllProducts(Product products[shopSize])
         cout << " Price: "; cout << products[i].Price;
         cout << endl;
     }
+    return;
 }
 
-void FindProduct(string productName, Product  products[shopSize])
+void FindProduct(string productName, Product  *products, int &arrSize)
 {
-    for (int i = 0; i < shopSize; i++)
+    for (int i = 0; i < arrSize; i++)
     {
         if (products[i].ProductName == productName)
         {
@@ -113,4 +160,26 @@ void drawLine(int n, char c)
     cout << "\n";
     cout.fill(' ');
     //cout << setfill(c) << setw(n + 1) << '\n' << setfill(' ');
+}
+
+int setValue(const char v[])
+{
+    int error;
+    int value;
+    do
+    {
+        error = 0;
+        cout << "Please enter " << v << " = ";
+        cin >> value;
+        if (cin.fail())
+        {
+            cout.clear();
+            cout << "Please enter a valid number" << endl;
+            error = 1;
+            cin.clear();
+            cin.ignore(80, '\n');
+        }
+    } while (error == 1);
+
+    return value;
 }
