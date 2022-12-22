@@ -60,20 +60,28 @@ void OutputAllProducts(Product* products, int& arrSize)
 
 void FindProduct(char* productName, Product* products, int& arrSize)
 {
+    bool hasFound = false;
     for (int i = 0; i < arrSize; i++)
     {
-        if (products[i].ProductName == productName)
+        if(!strcmp(products[i].ProductName, productName)) // TODO: CHeck string
         {
+            hasFound = true;
             OutputProduct(products[i]);
         }
+    }
+
+    if (!hasFound)
+    {
+        cout << "No product with " << productName << " was found!" << endl;;
     }
 }
 
 void OutputProduct(Product product)
 {
-    cout << "Product name is " << product.ProductName << endl;
-    cout << "Shop name is " << product.ShopName << endl;
-    cout << "Product price is " << product.Price << endl;
+    cout << endl;
+    cout << "Product name is " << product.ProductName;
+    cout << "Shop name is " << product.ShopName;
+    cout << "Product price is " << product.Price;
     cout << endl;
 }
 

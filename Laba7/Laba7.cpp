@@ -29,11 +29,13 @@ int main()
             break;
         case 'f':
             //cin.getline(productName, BUFSIZ);
-            cin.clear();
+            /*cin.clear();
             cin.ignore(80, '\n');
+            cout << "Product name: ";fgets(productName, BUFSIZ, stdin);*/
+            cin.ignore(80,'\n');
+            //c/*out << "Product name: ";cin >> productName;*/
             cout << "Product name: ";fgets(productName, BUFSIZ, stdin);
-            //cout << "Product name: ";cin >> productName;
-            FindProduct(fgets(productName, BUFSIZ, stdin), products, arraySize);
+            FindProduct(productName, products, arraySize);
             break;
         case 'a':
             products = AddProd(products, arraySize);
@@ -49,7 +51,6 @@ int main()
 
         cout << "Enter action: "; cin >> action;
     }
-
 }
 
 
